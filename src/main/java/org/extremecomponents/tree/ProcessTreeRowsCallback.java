@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.comparators.NullComparator;
-import org.apache.commons.collections.comparators.ReverseComparator;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.comparators.NullComparator;
+import org.apache.commons.collections4.comparators.ReverseComparator;
 import org.extremecomponents.table.callback.FilterPredicate;
 import org.extremecomponents.table.callback.FilterRowsCallback;
 import org.extremecomponents.table.callback.SortRowsCallback;
@@ -80,7 +80,7 @@ public final class ProcessTreeRowsCallback implements FilterRowsCallback, SortRo
     }
 
     private Collection filter(TableModel model, Collection rows) throws Exception {
-        List results = new ArrayList();
+        List<TableModel> results = new ArrayList<>();
         FilterPredicate filterPredicate = new FilterPredicate(model);
         CollectionUtils.select(rows, filterPredicate, results);
 

@@ -26,7 +26,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.comparators.NullComparator;
+import org.apache.commons.collections4.comparators.NullComparator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.extremecomponents.table.bean.Column;

@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +32,7 @@ import org.extremecomponents.util.ExtremeUtils;
  * 
  * @author Jeff Johnston
  */
-public final class FilterPredicate implements Predicate {
+public final class FilterPredicate implements Predicate<TableModel> {
     private static Log logger = LogFactory.getLog(FilterPredicate.class);
     private TableModel model;
 
@@ -43,7 +43,7 @@ public final class FilterPredicate implements Predicate {
     /**
      * Use the filter parameters to filter out the table.
      */
-    public boolean evaluate(Object bean) {
+    public boolean evaluate(TableModel bean) {
         boolean match = false;
 
         try {

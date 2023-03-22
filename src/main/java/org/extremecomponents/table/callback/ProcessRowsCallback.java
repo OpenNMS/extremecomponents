@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.comparators.NullComparator;
-import org.apache.commons.collections.comparators.ReverseComparator;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.comparators.NullComparator;
+import org.apache.commons.collections4.comparators.ReverseComparator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,11 +57,8 @@ public class ProcessRowsCallback implements RetrieveRowsCallback, FilterRowsCall
         }
 
         if (filtered) {
-            Collection collection = new ArrayList();
             FilterPredicate filterPredicate = new FilterPredicate(model);
-            CollectionUtils.select(rows, filterPredicate, collection);
-
-            return collection;
+            return CollectionUtils.select(rows, filterPredicate);
         }
 
         return rows;
