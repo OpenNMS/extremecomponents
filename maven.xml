@@ -1,0 +1,23 @@
+<project xmlns:deploy="deploy">
+
+	<goal name="copyjars">
+		<delete dir="lib"/>
+		<deploy:copy-deps todir="lib"/>
+	</goal>
+	
+	<preGoal name="java:compile">
+		<echo message="You are using java version ${java.version}"/>
+	</preGoal>
+	
+	<postGoal name="java:compile">
+		<mkdir dir="${maven.build.dir}/classes/META-INF"/>
+		<copy file="./resources/extremecomponents.tld" tofile="${maven.build.dir}/classes/META-INF/extremecomponents.tld" />
+	</postGoal>
+
+	<postGoal name="jar:install-snapshot">
+		<echo message="Deleting directories"/>
+		<delete dir="${maven.build.dir}/classes"/>
+		<delete dir="${maven.build.dir}/extremecomp"/>
+	</postGoal>	
+
+</project>

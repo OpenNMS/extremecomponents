@@ -1,0 +1,217 @@
+<project>
+
+ 	<pomVersion>3</pomVersion>
+ 	<groupId>extremecomponents</groupId>
+ 	<artifactId>extremecomponents</artifactId>
+ 	<name>eXtremeComponents</name>
+ 	<currentVersion>1.0.1</currentVersion>
+	<organization>
+        <name>sourceforge</name>
+        <url>http://sourceforge.net</url>
+        <logo>http://sourceforge.net/sflogo.php?group_id=${pom.groupId}&amp;type=4</logo>
+    </organization>
+ 	<inceptionYear>2004</inceptionYear>
+ 	<package>org.extremecomponents</package>
+  
+ 	<description>eXtremeComponents is a project that was created in ${pom.inceptionYear}.</description>
+ 	<shortDescription>${pom.name} is a jsp dynamically generated table.</shortDescription>
+
+ 	<url>http://extremecomp.sourceforge.net</url>
+ 	<issueTrackingUrl>http://sourceforge.net/tracker/?group_id=${maven.sourceforge.project.groupId}</issueTrackingUrl>
+
+    <siteAddress>shell.sourceforge.net</siteAddress>
+    <siteDirectory>/home/groups/e/ex/extremecomp/htdocs/</siteDirectory>
+	<distributionSite/>
+	<distributionDirectory/>
+	
+	<mailingLists>
+		<mailingList>
+			<name>${pom.name} User Mailing list</name>
+			<subscribe>http://lists.sourceforge.net/lists/listinfo/${pom.groupId}-user</subscribe>
+			<unsubscribe>http://lists.sourceforge.net/lists/listinfo/${pom.groupId}-user</unsubscribe>
+		</mailingList>
+		<mailingList>
+			<name>${pom.name} Developer Mailing list</name>
+			<subscribe>http://lists.sourceforge.net/lists/listinfo/${pom.groupId}-developer</subscribe>
+			<unsubscribe>http://lists.sourceforge.net/lists/listinfo/${pom.groupId}-developer</unsubscribe>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+		<developer>
+			<name>Jeff Johnston</name>
+			<id>jjohnst</id>
+			<email>jeffjj@mn.rr.com</email>
+			<organization>eXtremeComponents</organization>
+			<roles>
+                <role>Project admin</role>
+            </roles>
+            <timezone>+6</timezone>
+		</developer>
+    </developers>
+	
+	<contributors/>
+	
+	<licenses>
+		<license>
+	    	<name>Apache License V2.0</name>
+	    	<url>http://extremecomp.sourceforge.net/license.html</url>
+		</license>
+	</licenses>
+
+	<dependencies>
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.6</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>avalon-framework</groupId>
+            <artifactId>avalon-framework</artifactId>
+            <version>4.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik</artifactId>
+            <version>1.5-fop-0.20-5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.7.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>fop</groupId>
+            <artifactId>fop</artifactId>
+            <version>0.20.5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>jmock</groupId>
+            <artifactId>jmock</artifactId>
+            <version>1.0.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>2.2.1</version>
+            <type>jar</type>
+        </dependency>  
+       <dependency>
+            <groupId>poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>2.5.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>servletapi</groupId>
+            <artifactId>servletapi</artifactId>
+            <version>2.3</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.0.2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.5.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet</artifactId>
+            <version>1.2.3</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xdoclet-web-module</artifactId>
+            <version>1.2.3</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xdoclet</groupId>
+            <artifactId>xjavadoc</artifactId>
+            <version>1.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.6.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>2.0.2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+	
+	<build>
+		<nagEmailAddress/>
+		<sourceDirectory>JavaSource</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>JavaSource</directory>
+				<includes>
+			    	<include>**/*.properties</include>
+			    	<include>**/*.txt</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+	
+    <reports>
+        <report>maven-license-plugin</report>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-jxr-plugin</report>
+        <report>maven-jdepend-plugin</report>
+        <report>maven-pmd-plugin</report>
+        <report>maven-tasklist-plugin</report>
+        <report>maven-simian-plugin</report>
+        <report>maven-changes-plugin</report>
+        <report>maven-faq-plugin</report>
+    </reports>
+		
+</project>
