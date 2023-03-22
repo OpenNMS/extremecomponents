@@ -15,53 +15,59 @@
  */
 package org.extremecomponents.table.filter;
 
+import static org.apache.xmlgraphics.util.MimeConstants.MIME_PDF;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.xml.XMLConstants;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
 
-import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.apache.avalon.framework.logger.Logger;
-import org.apache.fop.apps.Driver;
-import org.apache.fop.apps.Options;
-import org.apache.fop.messaging.MessageHandler;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FopFactoryBuilder;
 import org.extremecomponents.table.core.Preferences;
-import org.xml.sax.InputSource;
 
 /**
  * @author Jeff Johnston
  */
 public class PdfViewResolver implements ViewResolver {
-    private Logger log = null;
-    private final static String USERCONFIG_LOCATION = "exportPdf.userconfigLocation";
+    private static final String USERCONFIG_LOCATION = "exportPdf.userconfigLocation";
 
     public void resolveView(ServletRequest request, ServletResponse response, Preferences preferences, Object viewData) throws Exception {
-        InputStream is = new ByteArrayInputStream(((String) viewData).getBytes("UTF-8"));
+        InputStream is = new ByteArrayInputStream(((String) viewData).getBytes(StandardCharsets.UTF_8));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        Driver driver = new Driver(new InputSource(is), out);
+        final TransformerFactory tfact = TransformerFactory.newInstance();
+        tfact.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        tfact.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
-        if (log == null) {
-            log = new ConsoleLogger(ConsoleLogger.LEVEL_WARN);
-            MessageHandler.setScreenLogger(log);
-        }
-        
+        URL configUrl = this.getClass().getResource("fop.xconf");
         String userconfigLocation = preferences.getPreference(USERCONFIG_LOCATION);
         if (userconfigLocation != null) {
-            InputStream input = this.getClass().getResourceAsStream(userconfigLocation);
-            if (input != null) {
-                new Options(input);
-            }
+        	configUrl = this.getClass().getResource(userconfigLocation);
         }
-        
-        driver.setLogger(log);
-        driver.setRenderer(Driver.RENDER_PDF);
-        driver.run();
 
-        byte[] contents = out.toByteArray();
+        final FopFactory fopFactory = new FopFactoryBuilder(configUrl.toURI())
+        		.build();
+        final Fop fop = fopFactory.newFop(MIME_PDF, out);
+
+        final Transformer transformer = tfact.newTransformer();
+        transformer.setOutputProperty(OutputKeys.ENCODING, StandardCharsets.UTF_8.name());
+        final StreamSource streamSource = new StreamSource(is);
+        transformer.transform(streamSource, new SAXResult(fop.getDefaultHandler()));
+
+        final byte[] contents = out.toByteArray();
         response.setContentLength(contents.length);
         response.getOutputStream().write(contents);
     }
