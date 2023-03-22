@@ -15,8 +15,8 @@
  */
 package org.extremecomponents.table.cell;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.core.TableConstants;
 import org.extremecomponents.table.core.TableModel;
@@ -81,7 +81,7 @@ public class FilterCell implements Cell {
 
         String value = column.getValueAsString();
         if (StringUtils.isNotBlank(value)) {
-            html.value(StringEscapeUtils.escapeHtml(value));
+            html.value(StringEscapeUtils.escapeHtml4(value));
         }
 
         StringBuffer onkeypress = new StringBuffer();

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Will build up an Html String piece by piece.

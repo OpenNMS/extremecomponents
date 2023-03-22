@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.table.view;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * org.extremecomponents.base.ViewUtils - Utility methods for parsing and

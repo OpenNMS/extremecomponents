@@ -18,7 +18,7 @@ package org.extremecomponents.util;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author phorn

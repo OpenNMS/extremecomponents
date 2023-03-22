@@ -17,7 +17,7 @@ package org.extremecomponents.table.bean;
 
 import java.util.Collection;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.core.PreferencesConstants;
 import org.extremecomponents.table.core.TableConstants;
 import org.extremecomponents.table.core.TableModel;

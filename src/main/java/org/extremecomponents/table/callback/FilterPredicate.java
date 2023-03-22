@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.extremecomponents.table.bean.Column;

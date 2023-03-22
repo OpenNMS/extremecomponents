@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.table.tag;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.bean.Export;
 import org.extremecomponents.table.core.TableConstants;
 import org.extremecomponents.table.core.TableModel;

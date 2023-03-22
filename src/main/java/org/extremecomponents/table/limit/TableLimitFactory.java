@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.table.limit;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.context.Context;
 import org.extremecomponents.table.core.Preferences;
 import org.extremecomponents.table.core.PreferencesConstants;

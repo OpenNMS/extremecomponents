@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.calc.CalcResult;
 import org.extremecomponents.table.calc.CalcUtils;

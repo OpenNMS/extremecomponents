@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.table.limit;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.extremecomponents.table.core.TableConstants;
 
 /**

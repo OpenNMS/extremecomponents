@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.table.handler;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.Cell;
 import org.extremecomponents.table.core.TableModel;

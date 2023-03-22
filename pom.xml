@@ -29,8 +29,7 @@
     <dependency>
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
-      <version>1.6</version>
-      <type>jar</type>
+      <version>1.7.0</version>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -53,14 +52,19 @@
       <version>3.0</version>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.0</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>1.10.0</version>
     </dependency>
     <dependency>
       <groupId>fop</groupId>

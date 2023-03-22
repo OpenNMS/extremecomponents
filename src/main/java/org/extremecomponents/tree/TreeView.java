@@ -15,7 +15,7 @@
  */
 package org.extremecomponents.tree;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.core.TableConstants;
 import org.extremecomponents.table.core.TableModel;
 import org.extremecomponents.table.view.html.BuilderUtils;

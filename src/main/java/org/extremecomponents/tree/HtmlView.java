@@ -18,7 +18,7 @@ package org.extremecomponents.tree;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.bean.Export;
 import org.extremecomponents.table.bean.Row;

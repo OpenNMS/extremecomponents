@@ -18,7 +18,7 @@ package org.extremecomponents.table.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.extremecomponents.table.core.RetrievalUtils;
 import org.extremecomponents.table.core.MessagesConstants;
 import org.extremecomponents.table.core.PreferencesConstants;
