@@ -40,7 +40,7 @@ public interface Context {
 
     public String getParameter(String name);
 
-    public Map getParameterMap();
+    public Map<String, String[]> getParameterMap();
 
     public Object getRequestAttribute(String name);
 

@@ -86,9 +86,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>poi</groupId>
+      <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>2.5.1</version>
+      <version>3.17</version>
       <optional>true</optional>
     </dependency>
     <dependency>

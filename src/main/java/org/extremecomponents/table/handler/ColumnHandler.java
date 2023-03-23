@@ -38,7 +38,7 @@ import org.extremecomponents.table.core.TableModelUtils;
  */
 public class ColumnHandler {
     private TableModel model;
-    private List columns = new ArrayList();
+    private List<Column> columns = new ArrayList<>();
     private Column firstColumn;
     private Column lastColumn;
 
@@ -87,13 +87,13 @@ public class ColumnHandler {
         return columns.size();
     }
 
-    public List getColumns() {
+    public List<Column> getColumns() {
         return columns;
     }
 
     public Column getColumnByAlias(String alias) {
-        for (Iterator iter = columns.iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+        for (Iterator<Column> iter = columns.iterator(); iter.hasNext();) {
+            Column column = iter.next();
             String columnAlias = column.getAlias();
             if (columnAlias != null && columnAlias.equals(alias)) {
                 return column;
@@ -107,11 +107,11 @@ public class ColumnHandler {
         return columnCount() > 0;
     }
 
-    public List getFilterColumns() {
+    public List<Column> getFilterColumns() {
         boolean cleared = model.getLimit().isCleared();
 
-        for (Iterator iter = columns.iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+        for (Iterator<Column> iter = columns.iterator(); iter.hasNext();) {
+            Column column = iter.next();
             String value = model.getLimit().getFilterSet().getFilterValue(column.getAlias());
             if (cleared || StringUtils.isEmpty(value)) {
                 value = "";
@@ -123,9 +123,9 @@ public class ColumnHandler {
         return columns;
     }
 
-    public List getHeaderColumns() {
-        for (Iterator iter = columns.iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+    public List<Column> getHeaderColumns() {
+        for (Iterator<Column> iter = columns.iterator(); iter.hasNext();) {
+            Column column = iter.next();
             Cell cell = TableModelUtils.getHeaderCell(column, column.getTitle());
 
             boolean isExported = model.getLimit().isExported();
@@ -150,15 +150,11 @@ public class ColumnHandler {
         boolean allowView = allowView(column, view);
         boolean denyView = denyView(column, view);
 
-        if (allowView & !denyView) {
-            return true;
-        }
-
-        return false;
+        return allowView && !denyView;
     }
 
     private boolean allowView(Column column, String view) {
-        String viewsAllowed[] = column.getViewsAllowed();
+        String[] viewsAllowed = column.getViewsAllowed();
         if (viewsAllowed == null || viewsAllowed.length == 0) {
             return true;
         }
@@ -173,7 +169,7 @@ public class ColumnHandler {
     }
 
     private boolean denyView(Column column, String view) {
-        String viewsDenied[] = column.getViewsDenied();
+        String[] viewsDenied = column.getViewsDenied();
         if (viewsDenied == null || viewsDenied.length == 0) {
             return false;
         }
@@ -188,8 +184,8 @@ public class ColumnHandler {
     }
     
     public Column getFirstCalcColumn() {
-        for (Iterator iter = columns.iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+        for (Iterator<Column> iter = columns.iterator(); iter.hasNext();) {
+            Column column = iter.next();
             if (column.isCalculated()) {
                 return column;
             }
@@ -200,7 +196,7 @@ public class ColumnHandler {
 
     public CalcResult[] getCalcResults(Column column) {
         if (!column.isCalculated()) {
-            return null;
+            return new CalcResult[] {};
         }
 
         return CalcUtils.getCalcResults(model, column);

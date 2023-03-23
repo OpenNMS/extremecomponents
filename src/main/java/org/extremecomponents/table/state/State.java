@@ -23,6 +23,6 @@ import org.extremecomponents.table.context.Context;
  * @author Jeff Johnston
  */
 public interface State {
-    public void saveParameters(Context context, String tableId, Map parameterMap);
-    public Map getParameters(Context context, String tableId, String stateAttr);
+    public void saveParameters(Context context, String tableId, Map<String, String[]> parameterMap);
+    public Map<String, String[]> getParameters(Context context, String tableId, String stateAttr);
 }

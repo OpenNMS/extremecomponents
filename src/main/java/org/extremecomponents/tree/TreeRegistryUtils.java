@@ -17,14 +17,14 @@ public class TreeRegistryUtils {
     public static String getHiddenFields(TableModel model, String parameter) {
         HtmlBuilder html = new HtmlBuilder();
 
-        Set keys = model.getRegistry().getParameterMap().keySet();
+        Set<String> keys = model.getRegistry().getParameterMap().keySet();
 
-        for (Iterator iter = keys.iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
+        for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+            String name = iter.next();
 
             if (((parameter == null) && !name.startsWith(model.getTableHandler().prefixWithTableId())) 
                     || (name.startsWith(model.getTableHandler().prefixWithTableId() + parameter))) {
-                String values[] = (String[]) model.getRegistry().getParameterMap().get(name);
+                String[] values = model.getRegistry().getParameterMap().get(name);
                 if (values == null || values.length == 0) {
                     html.newline();
                     html.input("hidden").name(name).xclose();
@@ -48,15 +48,15 @@ public class TreeRegistryUtils {
     public static String getParameterString(TableModel model, String parameter) {
         HtmlBuilder html = new HtmlBuilder();
 
-        Set keys = model.getRegistry().getParameterMap().keySet();
+        Set<String> keys = model.getRegistry().getParameterMap().keySet();
 
-        for (Iterator iter = keys.iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
+        for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
+            String name = iter.next();
 
             if (((parameter == null) 
                     && !name.startsWith(model.getTableHandler().prefixWithTableId())) 
                     || (name.startsWith(model.getTableHandler().prefixWithTableId() + parameter))) {
-                String values[] = (String[]) model.getRegistry().getParameterMap().get(name);
+                String[] values = model.getRegistry().getParameterMap().get(name);
                 if (values == null || values.length == 0) {
                     html.ampersand().append(name).equals();
                 } else {
@@ -78,7 +78,7 @@ public class TreeRegistryUtils {
      * @deprecated Is used by now deprecated HtmlView
      */
     public static String getURLParameterString(TableModel model, boolean filter, boolean sort, boolean page, boolean rowsDisplayed) {
-        StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
 
         if (filter) {
             sb.append(getParameterString(model, TableConstants.FILTER));
@@ -107,7 +107,7 @@ public class TreeRegistryUtils {
      * @deprecated Is used by now deprecated HtmlView
      */
     public static String getFormHiddenFields(TableModel model, boolean filter, boolean sort, boolean page, boolean rowsDisplayed) {
-        StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
 
         if (filter) {
             sb.append(getHiddenFields(model, TableConstants.FILTER));

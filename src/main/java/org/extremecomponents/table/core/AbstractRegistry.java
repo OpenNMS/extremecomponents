@@ -27,7 +27,7 @@ import org.extremecomponents.tree.TreeConstants;
  * @author Jeff Johnston
  */
 public abstract class AbstractRegistry implements Registry {
-    protected Map parameterMap;
+    protected Map<String, String[]> parameterMap;
     protected Context context;
     protected String tableId;
     protected String prefixWithTableId;
@@ -36,12 +36,12 @@ public abstract class AbstractRegistry implements Registry {
     protected boolean autoIncludeParameters;
 
     public void setParameterMap() {
-        Map tableParameterMap = new HashMap();
-        Map userDefinedParameterMap = new HashMap();
+        Map<String, String[]> tableParameterMap = new HashMap<>();
+        Map<String, String[]> userDefinedParameterMap = new HashMap<>();
 
-        Map params = context.getParameterMap();
-        for (Iterator iter = params.keySet().iterator(); iter.hasNext();) {
-            String paramName = (String) iter.next();
+        Map<String, String[]> params = context.getParameterMap();
+        for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
+            String paramName = iter.next();
 
             //throw-away parameter for exporting so never store this
             if (paramName.equals(TableConstants.EXPORT_TABLE_ID) ||
@@ -57,11 +57,11 @@ public abstract class AbstractRegistry implements Registry {
                     || paramName.startsWith(prefixWithTableId + TableConstants.EXPORT_FILE_NAME)
                     || paramName.startsWith(prefixWithTableId + TableConstants.ALIAS)
                     || paramName.startsWith(prefixWithTableId + TreeConstants.OPEN)) {
-                String paramValues[] = TableModelUtils.getValueAsArray(params.get(paramName));
+                String[] paramValues = TableModelUtils.getValueAsArray(params.get(paramName));
                 tableParameterMap.put(paramName, paramValues);
             } else {
                 if (autoIncludeParameters) {
-                    String paramValues[] = TableModelUtils.getValueAsArray(params.get(paramName));
+                    String[] paramValues = TableModelUtils.getValueAsArray(params.get(paramName));
                     userDefinedParameterMap.put(paramName, paramValues);
                 }
             }
@@ -71,17 +71,17 @@ public abstract class AbstractRegistry implements Registry {
         parameterMap.putAll(userDefinedParameterMap);
     }
 
-    public Map handleState(Map tableParameterMap) {
-        State state = TableCache.getInstance().getState(this.state);
+    public Map<String, String[]> handleState(Map<String, String[]> tableParameterMap) {
+        final State s = TableCache.getInstance().getState(this.state);
 
         if (tableParameterMap.isEmpty()) {
-            Map stateParameters = state.getParameters(context, tableId, stateAttr);
+            Map<String, String[]> stateParameters = s.getParameters(context, tableId, stateAttr);
             if (stateParameters != null) {
                 tableParameterMap = stateParameters;
             }
         }
 
-        handleStateInternal(state, tableParameterMap);
+        handleStateInternal(s, tableParameterMap);
 
         return tableParameterMap;
     }
@@ -90,7 +90,7 @@ public abstract class AbstractRegistry implements Registry {
      * Add additional parameter to the registry.
      */
     public void addParameter(String name, Object value) {
-        String paramValues[] = TableModelUtils.getValueAsArray(value);
+        String[] paramValues = TableModelUtils.getValueAsArray(value);
         parameterMap.put(name, paramValues);
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractRegistry implements Registry {
      * @param name The parameter name to add
      */
     public String getParameter(String parameter) {
-        String[] values = (String[]) parameterMap.get(parameter);
+        String[] values = parameterMap.get(parameter);
         if (values != null && values.length > 0) {
             return values[0];
         }
@@ -113,7 +113,7 @@ public abstract class AbstractRegistry implements Registry {
     /**
      * Get all the parameters as a Map
      */
-    public Map getParameterMap() {
+    public Map<String, String[]> getParameterMap() {
         return parameterMap;
     }
 
@@ -127,5 +127,5 @@ public abstract class AbstractRegistry implements Registry {
         parameterMap.remove(parameter);
     }
 
-    protected abstract void handleStateInternal(State state, Map tableParameterMap);
+    protected abstract void handleStateInternal(State state, Map<String, String[]> tableParameterMap);
 }

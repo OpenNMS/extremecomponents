@@ -586,7 +586,7 @@ public class HtmlView extends HtmlBuilder implements View {
             return;
         }
 
-        String calcTitle[] = calcColumn.getCalcTitle();
+        String[] calcTitle = calcColumn.getCalcTitle();
         if (calcTitle != null && calcTitle.length > 0) {
             tr(1).close();
             td(2).styleClass(TABLE_TOTAL_TITLE).colSpan("" + model.getColumnHandler().columnCount()).close();
@@ -599,11 +599,11 @@ public class HtmlView extends HtmlBuilder implements View {
         }
 
         tr(1).close();
-        for (Iterator iter = model.getColumnHandler().getColumns().iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+        for (Iterator<Column> iter = model.getColumnHandler().getColumns().iterator(); iter.hasNext();) {
+            Column column = iter.next();
             if (column.isCalculated()) {
                 td(2).styleClass(TABLE_TOTALS).close();
-                CalcResult calcValues[] = model.getColumnHandler().getCalcResults(column);
+                CalcResult[] calcValues = model.getColumnHandler().getCalcResults(column);
                 for (int i = 0; i < calcValues.length; i++) {
                     CalcResult calcValue = calcValues[i];
                     Number value = calcValue.getValue();

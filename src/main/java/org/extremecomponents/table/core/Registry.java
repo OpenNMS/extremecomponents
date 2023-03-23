@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public interface Registry {
 
-    public Map handleState(Map tableParameterMap);
+    public Map<String, String[]> handleState(Map<String, String[]> tableParameterMap);
 
     public void addParameter(String name, Object value);
 
@@ -33,7 +33,7 @@ public interface Registry {
 
     public void setParameterMap();
 
-    public Map getParameterMap();
+    public Map<String, String[]> getParameterMap();
 
     public void removeParameter(String parameter);
 }

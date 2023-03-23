@@ -31,7 +31,12 @@ import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.calc.CalcResult;
 import org.extremecomponents.table.calc.CalcUtils;
@@ -56,8 +61,7 @@ public class XlsView implements View {
 
     private HSSFWorkbook wb;
     private HSSFSheet sheet;
-    private HSSFPrintSetup ps;
-    private Map styles;
+    private Map<String, HSSFCellStyle> styles;
     private short rownum;
     private short cellnum;
     private HSSFRow hssfRow;
@@ -85,14 +89,10 @@ public class XlsView implements View {
         wb = new HSSFWorkbook();
         sheet = wb.createSheet();
 
-        if (encoding.equalsIgnoreCase("UTF")) {
-            wb.setSheetName(0, "Export Workbook", HSSFWorkbook.ENCODING_UTF_16);
-        } else if (encoding.equalsIgnoreCase("UNICODE")) {
-            wb.setSheetName(0, "Export Workbook", HSSFWorkbook.ENCODING_COMPRESSED_UNICODE);
-        }
+        wb.setSheetName(0, "Export Workbook");
 
         styles = initStyles(wb);
-        ps = sheet.getPrintSetup();
+        final HSSFPrintSetup ps = sheet.getPrintSetup();
 
         sheet.setAutobreaks(true);
         ps.setFitHeight((short) 1);
@@ -134,19 +134,19 @@ public class XlsView implements View {
         cellnum = 0;
         HSSFRow row = sheet.createRow(rownum);
 
-        List columns = model.getColumnHandler().getHeaderColumns();
-        for (Iterator iter = columns.iterator(); iter.hasNext();) {
-            Column column = (Column) iter.next();
+        List<Column> columns = model.getColumnHandler().getHeaderColumns();
+        for (Iterator<Column> iter = columns.iterator(); iter.hasNext();) {
+            Column column = iter.next();
             String title = column.getCellDisplay();
             HSSFCell hssfCell = row.createCell(cellnum);
 
             setCellEncoding(hssfCell);
 
-            hssfCell.setCellStyle((HSSFCellStyle) styles.get("titleStyle"));
-            hssfCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+            hssfCell.setCellStyle(styles.get("titleStyle"));
+            hssfCell.setCellType(CellType.STRING);
             hssfCell.setCellValue(title);
             int valWidth = (title + "").length() * WIDTH_MULT;
-            sheet.setColumnWidth(hssfCell.getCellNum(), (short) valWidth);
+            sheet.setColumnWidth(hssfCell.getColumnIndex(), (short) valWidth);
 
             cellnum++;
         }
@@ -157,7 +157,7 @@ public class XlsView implements View {
         if (value.trim().equals(NBSP)) {
             value = "";
         }
-        cell.setCellStyle((HSSFCellStyle) styles.get("textStyle" + styleModifier));
+        cell.setCellStyle(styles.get("textStyle" + styleModifier));
         fixWidthAndPopulate(cell, NON_NUMERIC, value);
     }
 
@@ -186,25 +186,25 @@ public class XlsView implements View {
                 numeric = NON_NUMERIC;
             }
 
-            cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            cell.setCellType(CellType.NUMERIC);
 
             if (moneyFlag) {
                 // format money
-                cell.setCellStyle((HSSFCellStyle) styles.get("moneyStyle" + styleModifier));
+                cell.setCellStyle(styles.get("moneyStyle" + styleModifier));
             } else if (percentFlag) {
                 // format percent
                 numeric = numeric / 100;
-                cell.setCellStyle((HSSFCellStyle) styles.get("percentStyle" + styleModifier));
+                cell.setCellStyle(styles.get("percentStyle" + styleModifier));
             }
         } else if (numeric != NON_NUMERIC) {
             // format numeric
-            cell.setCellStyle((HSSFCellStyle) styles.get("numericStyle" + styleModifier));
+            cell.setCellStyle(styles.get("numericStyle" + styleModifier));
         } else {
             // format text
             if (value.trim().equals(NBSP)) {
                 value = "";
             }
-            cell.setCellStyle((HSSFCellStyle) styles.get("textStyle" + styleModifier));
+            cell.setCellStyle(styles.get("textStyle" + styleModifier));
         }
 
         fixWidthAndPopulate(cell, numeric, value);
@@ -225,17 +225,17 @@ public class XlsView implements View {
             }
         }
 
-        if (valWidth > sheet.getColumnWidth(cell.getCellNum())) {
-            sheet.setColumnWidth(cell.getCellNum(), (short) valWidth);
+        if (valWidth > sheet.getColumnWidth(cell.getColumnIndex())) {
+            sheet.setColumnWidth(cell.getColumnIndex(), valWidth);
         }
     }
 
-    private Map initStyles(HSSFWorkbook wb) {
+    private Map<String, HSSFCellStyle> initStyles(HSSFWorkbook wb) {
         return initStyles(wb, DEFAULT_FONT_HEIGHT);
     }
 
-    private Map initStyles(HSSFWorkbook wb, short fontHeight) {
-        Map result = new HashMap();
+    private Map<String, HSSFCellStyle> initStyles(HSSFWorkbook wb, short fontHeight) {
+        Map<String, HSSFCellStyle> result = new HashMap<>();
         HSSFCellStyle titleStyle = wb.createCellStyle();
         HSSFCellStyle textStyle = wb.createCellStyle();
         HSSFCellStyle boldStyle = wb.createCellStyle();
@@ -274,59 +274,59 @@ public class XlsView implements View {
 
         // Global fonts
         HSSFFont font = wb.createFont();
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
-        font.setColor(HSSFColor.BLACK.index);
+        font.setBold(false);
+        font.setColor(HSSFColorPredefined.BLACK.getIndex());
         font.setFontName(HSSFFont.FONT_ARIAL);
         font.setFontHeightInPoints(fontHeight);
 
         HSSFFont fontBold = wb.createFont();
-        fontBold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        fontBold.setColor(HSSFColor.BLACK.index);
+        fontBold.setBold(true);
+        fontBold.setColor(HSSFColorPredefined.BLACK.getIndex());
         fontBold.setFontName(HSSFFont.FONT_ARIAL);
         fontBold.setFontHeightInPoints(fontHeight);
 
         // Money Style
         moneyStyle.setFont(font);
-        moneyStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        moneyStyle.setAlignment(HorizontalAlignment.RIGHT);
         moneyStyle.setDataFormat(format.getFormat(moneyFormat));
 
         // Money Style Bold
         moneyStyleBold.setFont(fontBold);
-        moneyStyleBold.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        moneyStyleBold.setAlignment(HorizontalAlignment.RIGHT);
         moneyStyleBold.setDataFormat(format.getFormat(moneyFormat));
 
         // Percent Style
         percentStyle.setFont(font);
-        percentStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        percentStyle.setAlignment(HorizontalAlignment.RIGHT);
         percentStyle.setDataFormat(format.getFormat(percentFormat));
 
         // Percent Style Bold
         percentStyleBold.setFont(fontBold);
-        percentStyleBold.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        percentStyleBold.setAlignment(HorizontalAlignment.RIGHT);
         percentStyleBold.setDataFormat(format.getFormat(percentFormat));
 
         // Standard Numeric Style
         numericStyle.setFont(font);
-        numericStyle.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        numericStyle.setAlignment(HorizontalAlignment.RIGHT);
 
         // Standard Numeric Style Bold
         numericStyleBold.setFont(fontBold);
-        numericStyleBold.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        numericStyleBold.setAlignment(HorizontalAlignment.RIGHT);
 
         // Title Style
         titleStyle.setFont(font);
-        titleStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        titleStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        titleStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        titleStyle.setBottomBorderColor(HSSFColor.BLACK.index);
-        titleStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        titleStyle.setLeftBorderColor(HSSFColor.BLACK.index);
-        titleStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        titleStyle.setRightBorderColor(HSSFColor.BLACK.index);
-        titleStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        titleStyle.setTopBorderColor(HSSFColor.BLACK.index);
-        titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        titleStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        titleStyle.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        titleStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        titleStyle.setBorderBottom(BorderStyle.THIN);
+        titleStyle.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        titleStyle.setBorderLeft(BorderStyle.THIN);
+        titleStyle.setLeftBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        titleStyle.setBorderRight(BorderStyle.THIN);
+        titleStyle.setRightBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        titleStyle.setBorderTop(BorderStyle.THIN);
+        titleStyle.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        titleStyle.setAlignment(HorizontalAlignment.CENTER);
+        titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
         // Standard Text Style
         textStyle.setFont(font);
@@ -338,60 +338,60 @@ public class XlsView implements View {
 
         // Money Style Total
         moneyStyle_Totals.setFont(fontBold);
-        moneyStyle_Totals.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        moneyStyle_Totals.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        moneyStyle_Totals.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        moneyStyle_Totals.setBottomBorderColor(HSSFColor.BLACK.index);
-        moneyStyle_Totals.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        moneyStyle_Totals.setTopBorderColor(HSSFColor.BLACK.index);
-        moneyStyle_Totals.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        moneyStyle_Totals.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        moneyStyle_Totals.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        moneyStyle_Totals.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        moneyStyle_Totals.setBorderBottom(BorderStyle.THIN);
+        moneyStyle_Totals.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        moneyStyle_Totals.setBorderTop(BorderStyle.THIN);
+        moneyStyle_Totals.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        moneyStyle_Totals.setAlignment(HorizontalAlignment.RIGHT);
+        moneyStyle_Totals.setVerticalAlignment(VerticalAlignment.CENTER);
         moneyStyle_Totals.setDataFormat(format.getFormat(moneyFormat));
 
         // n/a Style Total
         naStyle_Totals.setFont(fontBold);
-        naStyle_Totals.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        naStyle_Totals.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        naStyle_Totals.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        naStyle_Totals.setBottomBorderColor(HSSFColor.BLACK.index);
-        naStyle_Totals.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        naStyle_Totals.setTopBorderColor(HSSFColor.BLACK.index);
-        naStyle_Totals.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        naStyle_Totals.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        naStyle_Totals.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        naStyle_Totals.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        naStyle_Totals.setBorderBottom(BorderStyle.THIN);
+        naStyle_Totals.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        naStyle_Totals.setBorderTop(BorderStyle.THIN);
+        naStyle_Totals.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        naStyle_Totals.setAlignment(HorizontalAlignment.RIGHT);
+        naStyle_Totals.setVerticalAlignment(VerticalAlignment.CENTER);
 
         // Numeric Style Total
         numericStyle_Totals.setFont(fontBold);
-        numericStyle_Totals.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        numericStyle_Totals.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        numericStyle_Totals.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        numericStyle_Totals.setBottomBorderColor(HSSFColor.BLACK.index);
-        numericStyle_Totals.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        numericStyle_Totals.setTopBorderColor(HSSFColor.BLACK.index);
-        numericStyle_Totals.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        numericStyle_Totals.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        numericStyle_Totals.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        numericStyle_Totals.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        numericStyle_Totals.setBorderBottom(BorderStyle.THIN);
+        numericStyle_Totals.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        numericStyle_Totals.setBorderTop(BorderStyle.THIN);
+        numericStyle_Totals.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        numericStyle_Totals.setAlignment(HorizontalAlignment.RIGHT);
+        numericStyle_Totals.setVerticalAlignment(VerticalAlignment.CENTER);
 
         // Percent Style Total
         percentStyle_Totals.setFont(fontBold);
-        percentStyle_Totals.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        percentStyle_Totals.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        percentStyle_Totals.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        percentStyle_Totals.setBottomBorderColor(HSSFColor.BLACK.index);
-        percentStyle_Totals.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        percentStyle_Totals.setTopBorderColor(HSSFColor.BLACK.index);
-        percentStyle_Totals.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        percentStyle_Totals.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        percentStyle_Totals.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        percentStyle_Totals.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        percentStyle_Totals.setBorderBottom(BorderStyle.THIN);
+        percentStyle_Totals.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        percentStyle_Totals.setBorderTop(BorderStyle.THIN);
+        percentStyle_Totals.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        percentStyle_Totals.setAlignment(HorizontalAlignment.RIGHT);
+        percentStyle_Totals.setVerticalAlignment(VerticalAlignment.CENTER);
         percentStyle_Totals.setDataFormat(format.getFormat(percentFormat));
 
         // Text Style Total
         textStyle_Totals.setFont(fontBold);
-        textStyle_Totals.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        textStyle_Totals.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        textStyle_Totals.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        textStyle_Totals.setBottomBorderColor(HSSFColor.BLACK.index);
-        textStyle_Totals.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        textStyle_Totals.setTopBorderColor(HSSFColor.BLACK.index);
-        textStyle_Totals.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-        textStyle_Totals.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        textStyle_Totals.setFillForegroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+        textStyle_Totals.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        textStyle_Totals.setBorderBottom(BorderStyle.THIN);
+        textStyle_Totals.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        textStyle_Totals.setBorderTop(BorderStyle.THIN);
+        textStyle_Totals.setTopBorderColor(HSSFColorPredefined.BLACK.getIndex());
+        textStyle_Totals.setAlignment(HorizontalAlignment.LEFT);
+        textStyle_Totals.setVerticalAlignment(VerticalAlignment.CENTER);
 
         return result;
     }
@@ -405,8 +405,8 @@ public class XlsView implements View {
                 rownum++;
                 HSSFRow row = sheet.createRow(rownum);
                 cellnum = 0;
-                for (Iterator iter = model.getColumnHandler().getColumns().iterator(); iter.hasNext();) {
-                    Column column = (Column) iter.next();
+                for (Iterator<Column> iter = model.getColumnHandler().getColumns().iterator(); iter.hasNext();) {
+                    Column column = iter.next();
                     if (column.isFirstColumn()) {
                         String calcTitle = CalcUtils.getFirstCalcColumnTitleByPosition(model, i);
                         HSSFCell cell = row.createCell(cellnum);
@@ -425,14 +425,14 @@ public class XlsView implements View {
                         Number value = calcResult.getValue();
                         HSSFCell cell = row.createCell(cellnum);
                         setCellEncoding(cell);
-                        if (value != null)
+                        if (value != null) {
                             if (column.isEscapeAutoFormat()) {
                                 writeToCellAsText(cell, value.toString(), "_Totals");
                             } else {
                                 writeToCellFormatted(cell, ExtremeUtils.formatNumber(column.getFormat(), value, model.getLocale()), "_Totals");
                             }
-                        else {
-                            cell.setCellStyle((HSSFCellStyle) styles.get("naStyle_Totals"));
+                        } else {
+                            cell.setCellStyle(styles.get("naStyle_Totals"));
                             cell.setCellValue("n/a");
                         }
                         cellnum++;
@@ -451,11 +451,14 @@ public class XlsView implements View {
 
     //add to set Cell encoding
     private void setCellEncoding(HSSFCell cell) {
+        // not sure how to do this in newer POI, not sure it's even relevant
+        /*
         if (encoding.equalsIgnoreCase("UTF")) {
             cell.setEncoding(HSSFCell.ENCODING_UTF_16);
         } else if (encoding.equalsIgnoreCase("UNICODE")) {
             cell.setEncoding(HSSFCell.ENCODING_COMPRESSED_UNICODE);
         }
+        */
     }
 
 }
