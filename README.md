@@ -33,3 +33,9 @@ But really, this is here mostly to solve a specific need to clean up some securi
 I have no intention of keeping this up-to-date unless a transient dependency becomes problematic, or we find a regression from how things used to work.
 
 Use at your own risk.
+
+## In Conclusion...
+
+No really, do not use this.
+Please.
+I beg of you.
