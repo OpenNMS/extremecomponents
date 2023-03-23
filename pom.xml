@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.extremecomponents</groupId>
+  <groupId>org.opennms.extremecomponents</groupId>
   <artifactId>extremecomponents</artifactId>
   <name>eXtremeComponents</name>
   <version>2.0.0-SNAPSHOT</version>
   <inceptionYear>2004</inceptionYear>
-  <description>eXtremeComponents is a project that was created in ${project.inceptionYear}.</description>
-  <url>http://extremecomp.sourceforge.net</url>
+  <description>A direct port of extremecomponents 1.0.1 to modern dependencies.</description>
+  <url>https://github.com/OpenNMS/extremecomponents</url>
   <developers>
     <developer>
       <name>Jeff Johnston</name>
@@ -14,9 +14,18 @@
       <email>jeffjj@mn.rr.com</email>
       <organization>eXtremeComponents</organization>
       <roles>
-        <role>Project admin</role>
+        <role>Original Developer</role>
       </roles>
       <timezone>+6</timezone>
+    </developer>
+    <developer>
+      <name>Benjamin Reed</name>
+      <id>ranger</id>
+      <email>ranger@opennms.com</email>
+      <organization>The OpenNMS Group, Inc.</organization>
+      <roles>
+        <role>Repository Maintainer</role>
+      </roles>
     </developer>
   </developers>
   <licenses>
@@ -25,6 +34,11 @@
       <url>http://extremecomp.sourceforge.net/license.html</url>
     </license>
   </licenses>
+  <scm>
+    <url>https://github.com/OpenNMS/extremecomponents</url>
+    <connection>scm:git:git@github.com:OpenNMS/extremecomponents.git</connection>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>ant</groupId>
@@ -200,6 +214,57 @@
       -->
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.13</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>opennms-ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.simplify4u.plugins</groupId>
+            <artifactId>sign-maven-plugin</artifactId>
+            <version>1.0.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <skipNoKey>false</skipNoKey>
+                  <keyId>${env.GPG_KEY_ID}</keyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>opennms-ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>opennms-ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <repositories>
     <repository>
       <id>sakai</id>
@@ -209,4 +274,5 @@
       <snapshots><enabled>false</enabled></snapshots>
     </repository>
   </repositories>
+
 </project>
