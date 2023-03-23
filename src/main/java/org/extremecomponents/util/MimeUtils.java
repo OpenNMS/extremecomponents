@@ -19,12 +19,16 @@ import java.io.File;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author phorn
  */
 public class MimeUtils {
-    public final static String MIMETYPES_PROPERTIES = "mimeTypes.properties";
+    public static final String MIMETYPES_PROPERTIES = "mimeTypes.properties";
+
+    private static final Log logger = LogFactory.getLog(MimeUtils.class);
     private static Properties properties;
 
     /**
@@ -90,15 +94,16 @@ public class MimeUtils {
 
         try {
             properties = new Properties();
-            properties.load(new MimeUtils().getClass().getResourceAsStream(MIMETYPES_PROPERTIES));
+            properties.load(MimeUtils.class.getResourceAsStream(MIMETYPES_PROPERTIES));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("failed initialize built-in properties", e);
         }
     }
 
     /**
      * Just a test harness.
      */
+    @SuppressWarnings("java:S106")
     public static void main(String[] args) {
         System.out.println("MimeUtils.getExtensionMimeType(.gif)=" + MimeUtils.getExtensionMimeType(".gif"));
         System.out.println("MimeUtils.getExtensionMimeType(.pdf)=" + MimeUtils.getExtensionMimeType(".pdf"));

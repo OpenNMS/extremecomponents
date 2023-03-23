@@ -169,12 +169,8 @@ public final class TreeModelUtils {
                 if (bean.equals(BeanUtils.getProperty(row, identifier))) {
                     return row;
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
+                logger.error("failed to fetch property " + row, e);
             }
         }
         return null;

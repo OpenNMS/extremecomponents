@@ -17,8 +17,9 @@ package org.extremecomponents.table.callback;
 
 import java.util.Collection;
 
+import org.extremecomponents.table.bean.Row;
 import org.extremecomponents.table.core.TableModel;
 
 public interface FilterRowsCallback {
-    public Collection filterRows(TableModel model, Collection rows) throws Exception;
+    public Collection<Row> filterRows(TableModel model, Collection<Row> rows) throws Exception;
 }

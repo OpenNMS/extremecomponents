@@ -112,7 +112,6 @@ public class NullSafeBeanComparator<T> extends BeanComparator<T> {
 
             return this.comparator.compare(val1, val2);
         } catch (final Exception e) {
-            e.printStackTrace();
             log.warn(e);
             return 0;
         }

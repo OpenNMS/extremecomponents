@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.extremecomponents.table.context.Context;
 import org.extremecomponents.table.context.HttpServletRequestContext;
 import org.extremecomponents.table.core.Preferences;
@@ -38,6 +40,8 @@ import org.extremecomponents.util.MimeUtils;
  * @author Jeff Johnston
  */
 public abstract class AbstractExportFilter implements Filter {
+    private static final Log logger = LogFactory.getLog(AbstractExportFilter.class);
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         Context context = new HttpServletRequestContext((HttpServletRequest) request);
         boolean isExported = ExportFilterUtils.isExported(context);
@@ -57,15 +61,15 @@ public abstract class AbstractExportFilter implements Filter {
                 Preferences preferences = new TableProperties();
                 preferences.init(null, TableModelUtils.getPreferencesLocation(context));
                 String viewResolver = (String) request.getAttribute(TableConstants.VIEW_RESOLVER);
-                Class classDefinition = Class.forName(viewResolver);
+                Class<?> classDefinition = Class.forName(viewResolver);
                 ViewResolver handleExportViewResolver = (ViewResolver) classDefinition.newInstance();
                 handleExportViewResolver.resolveView(request, response, preferences, viewData);
                 response.getOutputStream().flush();
                 response.getOutputStream().close();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            logger.error("failed to handle export", e);
         }
     }
 

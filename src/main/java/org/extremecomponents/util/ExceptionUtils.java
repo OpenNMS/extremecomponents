@@ -18,16 +18,24 @@ package org.extremecomponents.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * @author paul horn
  */
 public final class ExceptionUtils {
+    private static final Log logger = LogFactory.getLog(ExceptionUtils.class);
+    
+    private ExceptionUtils() {}
+
     public static String formatStackTrace(Throwable t) {
         StringWriter sw = new StringWriter();
         try {
             PrintWriter p = new PrintWriter(sw);
             t.printStackTrace(p);
         } catch (Exception e) {
+            logger.error("an exception occurred while extracting a stacktrace", e);
         }
         return sw.toString();
     }

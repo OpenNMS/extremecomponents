@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Will build up an Html String piece by piece.
@@ -31,6 +33,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author Jeff Johnston
  */
 public class HtmlBuilder {
+    private static final Log logger = LogFactory.getLog(HtmlBuilder.class);
+
     private Writer writer;
 
     /**
@@ -57,7 +61,7 @@ public class HtmlBuilder {
         try {
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("failed to flush HTML string builder", e);
         }
     }
 
@@ -68,7 +72,7 @@ public class HtmlBuilder {
         try {
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("failed to close HTML string builder", e);
         }
     }
 
@@ -79,7 +83,7 @@ public class HtmlBuilder {
         try {
             writer.write(text);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("failed to write to HTML string builder", e);
         }
         return this;
     }
