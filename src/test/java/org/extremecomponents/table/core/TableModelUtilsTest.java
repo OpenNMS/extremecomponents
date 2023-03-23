@@ -88,20 +88,16 @@ public class TableModelUtilsTest extends ExtremeTableTestCase {
             iter.remove();
         }
         
-        assertTrue(rows.size() == 15);
+        assertEquals(15, rows.size());
         
         MockLimit limit = getLimit();
         limit.setRowStart(16);
         limit.setRowEnd(31);
         
         model.setLimit(limit);
-        
-        try {
-            Collection results = TableModelUtils.getCurrentRows(model, rows);
-            assertTrue(results.size() == 15);
-        } catch (Throwable t) {
-            fail();
-        }
+
+        Collection results = TableModelUtils.getCurrentRows(model, rows);
+        assertEquals(15, results.size());
     }
     
     public void testGetCurrentRowsRowEndTooLarge() {
@@ -118,7 +114,7 @@ public class TableModelUtilsTest extends ExtremeTableTestCase {
             iter.remove();
         }
         
-        assertTrue(rows.size() == 30);
+        assertEquals(30, rows.size());
         
         MockLimit limit = getLimit();
         limit.setRowStart(15);
@@ -126,11 +122,7 @@ public class TableModelUtilsTest extends ExtremeTableTestCase {
         
         model.setLimit(limit);
         
-        try {
-            Collection results = TableModelUtils.getCurrentRows(model, rows);
-            assertTrue(results.size() == 15);
-        } catch (Throwable t) {
-            fail();
-        }
+        final Collection results = TableModelUtils.getCurrentRows(model, rows);
+        assertEquals(15, results.size());
     }    
 }

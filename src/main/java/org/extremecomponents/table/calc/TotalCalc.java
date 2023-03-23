@@ -42,7 +42,7 @@ public class TotalCalc implements Calc {
         }
         
         public Number getTotalValue() {
-            return new BigDecimal(total);
+            return BigDecimal.valueOf(total);
         }
     }
 }

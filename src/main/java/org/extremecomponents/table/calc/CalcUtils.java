@@ -41,14 +41,14 @@ public final class CalcUtils {
     }
 
     public static CalcResult[] getCalcResults(TableModel model, Column column) {
-        List values = new ArrayList();
+        List<CalcResult> values = new ArrayList<>();
 
-        String calcs[] = column.getCalc();
+        String[] calcs = column.getCalc();
         for (int i = 0; i < calcs.length; i++) {
             values.add(getCalcResultsByPosition(model, column, i));
         }
 
-        return (CalcResult[]) values.toArray(new CalcResult[values.size()]);
+        return values.toArray(new CalcResult[values.size()]);
     }
 
     public static CalcResult getCalcResultsByPosition(TableModel model, Column column, int position) {
@@ -63,25 +63,25 @@ public final class CalcUtils {
     }
 
     public static String[] getFirstCalcColumnTitles(TableModel model) {
-        List values = new ArrayList();
+        List<String> values = new ArrayList<>();
 
         Column column = model.getColumnHandler().getFirstCalcColumn();
-        String calcs[] = column.getCalc();
+        String[] calcs = column.getCalc();
         for (int i = 0; i < calcs.length; i++) {
             values.add(getFirstCalcColumnTitleByPosition(model, i));
         }
 
-        return (String[]) values.toArray(new String[values.size()]);
+        return values.toArray(new String[values.size()]);
     }
 
     public static String getFirstCalcColumnTitleByPosition(TableModel model, int position) {
         Column column = model.getColumnHandler().getFirstCalcColumn();
-        String calcTitle[] = column.getCalcTitle();
+        String[] calcTitle = column.getCalcTitle();
         return calcTitle[position];
     }
 
     private static String getCalcClassNameByPosition(TableModel model, Column column, int position) {
-        String calcs[] = column.getCalc();
+        String[] calcs = column.getCalc();
         String calcName = calcs[position];
         String calcClassName = model.getPreferences().getPreference(PreferencesConstants.COLUMN_CALC + calcName);
         if (StringUtils.isBlank(calcClassName)) {
@@ -137,6 +137,6 @@ public final class CalcUtils {
             }
         }
 
-        return new BigDecimal(0.00);
+        return BigDecimal.valueOf(0.00);
     }
 }

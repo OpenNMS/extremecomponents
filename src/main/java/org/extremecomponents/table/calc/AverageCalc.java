@@ -48,10 +48,10 @@ public class AverageCalc implements Calc {
         
         public Number getAverageValue() {
             if (rowCount > 0) {
-                return new BigDecimal(total / rowCount);
+                return BigDecimal.valueOf(total / rowCount);
             }
             
-            return new BigDecimal(0.00);
+            return BigDecimal.valueOf(0.00);
         }
     }
 }
