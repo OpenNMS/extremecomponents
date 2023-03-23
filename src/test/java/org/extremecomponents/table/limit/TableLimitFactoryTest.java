@@ -40,12 +40,7 @@ public class TableLimitFactoryTest extends ExtremeTableTestCase {
         // (only for test as typically the TableFactory will init the factory)
         TableLimitFactory limitFactory = new TableLimitFactory(context, TableConstants.EXTREME_COMPONENTS, TableConstants.STATE_PERSIST, null);
         
-        // validate that getting the parameters from the state
-        // this would fail if it was not
-//        Map parameterMap = limitFactory.getRegistry().getParameterMap();
-//        String filter = helper.getFilter(CHAR_COLUMN);
-//        String[] param = (String[])parameterMap.get(filter);
-//        
-//        assertTrue(param[0].equals("Hello World"));
+        int rows = limitFactory.getCurrentRowsDisplayed(0, 0);
+        assertEquals("there are no rows", 0, rows);
     }
 }

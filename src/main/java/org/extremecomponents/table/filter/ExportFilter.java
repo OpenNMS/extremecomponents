@@ -24,8 +24,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author Jeff Johnston
  */
@@ -33,13 +31,12 @@ public class ExportFilter extends AbstractExportFilter {
     private boolean responseHeadersSetBeforeDoFilter;
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        String responseHeadersSetBeforeDoFilter = filterConfig.getInitParameter("responseHeadersSetBeforeDoFilter");
-        if (StringUtils.isNotBlank(responseHeadersSetBeforeDoFilter)) {
-            this.responseHeadersSetBeforeDoFilter = new Boolean(responseHeadersSetBeforeDoFilter).booleanValue();
-        }
+        this.responseHeadersSetBeforeDoFilter = Boolean.valueOf(filterConfig.getInitParameter("responseHeadersSetBeforeDoFilter"));
     }
     
-    public void destroy() {}
+    public void destroy() {
+        // nothing to destroy
+    }
 
     protected void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain, String exportFileName) throws IOException, ServletException {
         if (responseHeadersSetBeforeDoFilter) {

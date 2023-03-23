@@ -39,13 +39,13 @@ import org.extremecomponents.util.HtmlBuilder;
  * @author Jeff Johnston
  */
 public class HtmlView extends HtmlBuilder implements View {
-    public final static String TOOLBAR = "toolbar";
+    public final static String VIEW_TOOLBAR = "toolbar";
     public final static String SEPARATOR = "separator";
     public final static String STATUS_BAR = "statusBar";
     public final static String FILTER_BUTTONS = "filterButtons";
     public final static String FORM_BUTTONS = "formButtons";
-    public final static String FILTER = "filter";
-    public final static String TITLE = "title";
+    public final static String VIEW_FILTER = "filter";
+    public final static String VIEW_TITLE = "title";
     public final static String TABLE_TOTAL_TITLE = "tableTotalTitle";
     public final static String TABLE_TOTALS = "tableTotal";
     public final static String TABLE_TOTALS_EMPTY = "tableTotalEmpty";
@@ -148,7 +148,7 @@ public class HtmlView extends HtmlBuilder implements View {
 
         tr(1).close();
 
-        td(2).styleClass(TITLE).close();
+        td(2).styleClass(VIEW_TITLE).close();
 
         title(model);
 
@@ -184,7 +184,7 @@ public class HtmlView extends HtmlBuilder implements View {
             return;
         }
 
-        table(2).border("0").cellPadding("0").cellSpacing("1").styleClass(TOOLBAR).close();
+        table(2).border("0").cellPadding("0").cellSpacing("1").styleClass(VIEW_TOOLBAR).close();
 
         tr(3).close();
 
@@ -544,7 +544,7 @@ public class HtmlView extends HtmlBuilder implements View {
 
         filterFormStart(model);
 
-        tr(1).styleClass(FILTER).id(FILTER).close();
+        tr(1).styleClass(VIEW_FILTER).id(VIEW_FILTER).close();
 
         List columns = model.getColumnHandler().getFilterColumns();
         for (Iterator iter = columns.iterator(); iter.hasNext();) {

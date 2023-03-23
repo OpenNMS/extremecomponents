@@ -53,7 +53,7 @@ public final class TreeView extends HtmlView {
 
         tr(1).close();
 
-        td(2).styleClass(TITLE).close();
+        td(2).styleClass(VIEW_TITLE).close();
 
         title(model);
 

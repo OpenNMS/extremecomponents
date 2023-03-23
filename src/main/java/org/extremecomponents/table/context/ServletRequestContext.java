@@ -26,6 +26,8 @@ import javax.servlet.ServletRequest;
  * @author Jeff Johnston
  */
 public class ServletRequestContext implements Context {
+    private static final String NO_SESSION = "There is no session associated with the request.";
+
     private ServletRequest request;
 
     public ServletRequestContext(ServletRequest request) {
@@ -33,19 +35,19 @@ public class ServletRequestContext implements Context {
     }
 
     public Object getApplicationInitParameter(String name) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public Object getApplicationAttribute(String name) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public void setApplicationAttribute(String name, Object value) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public void removeApplicationAttribute(String name) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public Object getPageAttribute(String name) {
@@ -64,7 +66,7 @@ public class ServletRequestContext implements Context {
         return request.getParameter(name);
     }
 
-    public Map getParameterMap() {
+    public Map<String,String[]> getParameterMap() {
         return request.getParameterMap();
     }
 
@@ -81,15 +83,15 @@ public class ServletRequestContext implements Context {
     }
 
     public Object getSessionAttribute(String name) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public void setSessionAttribute(String name, Object value) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public void removeSessionAttribute(String name) {
-        throw new UnsupportedOperationException("There is no session associated with the request.");
+        throw new UnsupportedOperationException(NO_SESSION);
     }
 
     public Writer getWriter() {

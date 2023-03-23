@@ -35,13 +35,13 @@ public class PdfView implements View {
     public final static String HEADER_COLOR = "headerColor";
 
     private StringBuffer xlsfo = new StringBuffer();
-    private String font;
+    private String viewFont;
 
     public PdfView() {
     }
 
     public void beforeBody(TableModel model) {
-        this.font = model.getPreferences().getPreference(FONT);
+        this.viewFont = model.getPreferences().getPreference(FONT);
 
         xlsfo.append(startRoot());
         xlsfo.append(regionBefore(model));
@@ -196,11 +196,11 @@ public class PdfView implements View {
     }
 
     protected String getFont() {
-        return font == null ? "" : " font-family=\"" + font + "\"";
+        return viewFont == null ? "" : " font-family=\"" + viewFont + "\"";
     }
 
     protected String getHeadFont() {
-        return font == null ? "" : font + ",";
+        return viewFont == null ? "" : viewFont + ",";
     }
 
     /**

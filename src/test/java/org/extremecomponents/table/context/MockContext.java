@@ -25,12 +25,12 @@ import java.util.Map;
  * @author Jeff Johnston
  */
 public class MockContext implements Context {
-    public Map parameterMap = new HashMap();
-    public Map page = new HashMap();
-    public Map request = new HashMap();
-    public Map application = new HashMap();
-    public Map applicationInit = new HashMap();
-    public Map session = new HashMap();
+    public Map<String, String[]> parameterMap = new HashMap<String, String[]>();
+    public Map<String, Object> page = new HashMap<String, Object>();
+    public Map<String, Object> request = new HashMap<String, Object>();
+    public Map<String, Object> application = new HashMap<String, Object>();
+    public Map<String, Object> applicationInit = new HashMap<String, Object>();
+    public Map<String, Object> session = new HashMap<String, Object>();
 
     public Object getApplicationInitParameter(String name) {
         return applicationInit.get(name);
@@ -70,7 +70,7 @@ public class MockContext implements Context {
     }
 
     public String getParameter(String name) {
-        String[] values = (String[]) parameterMap.get(name);
+        String[] values = parameterMap.get(name);
         if (values != null && values.length > 0) {
             return values[0];
         }
@@ -78,7 +78,7 @@ public class MockContext implements Context {
         return null;
     }
 
-    public Map getParameterMap() {
+    public Map<String, String[]> getParameterMap() {
         return parameterMap;
     }
 

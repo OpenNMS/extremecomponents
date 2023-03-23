@@ -16,6 +16,7 @@
 package org.extremecomponents.table.callback;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.beanutils.NestedNullException;
@@ -30,21 +31,23 @@ import org.apache.commons.logging.LogFactory;
  * @author vbala
  * @version 1.0
  */
-public class NullSafeBeanComparator extends BeanComparator {
+public class NullSafeBeanComparator<T> extends BeanComparator<T> {
+    private static final long serialVersionUID = 1L;
 
-    private Log log = LogFactory.getLog(NullSafeBeanComparator.class);
+    private static final Log log = LogFactory.getLog(NullSafeBeanComparator.class);
 
     protected boolean nullsAreHigh = true;
 
     protected String property;
 
-    protected Comparator comparator;
+    protected transient Comparator<T> comparator;
 
-    public Comparator getComparator() {
+    @Override
+    public Comparator<T> getComparator() {
         return comparator;
     }
 
-    public void setComparator(Comparator comparator) {
+    public void setComparator(Comparator<T> comparator) {
         this.comparator = comparator;
     }
 
@@ -56,11 +59,13 @@ public class NullSafeBeanComparator extends BeanComparator {
         this.nullsAreHigh = nullsAreHigh;
     }
 
+    @Override
     public String getProperty() {
         return property;
     }
 
-    public void setProperty(String property) {
+    @Override
+    public void setProperty(final String property) {
         this.property = property;
     }
 
@@ -68,28 +73,33 @@ public class NullSafeBeanComparator extends BeanComparator {
      * Compare beans safely. Handles NestedNullException thrown by PropertyUtils
      * when the parent object is null
      */
-    public int compare(Object o1, Object o2) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public int compare(T o1, T o2) {
 
         if (property == null) {
             // use the object's compare since no property is specified
             return this.comparator.compare(o1, o2);
         }
 
-        Object val1 = null, val2 = null;
+        T val1 = null;
+        T val2 = null;
 
         try {
             try {
-                val1 = PropertyUtils.getProperty(o1, property);
+                val1 = (T) PropertyUtils.getProperty(o1, property);
             } catch (NestedNullException ignored) {
+                // just leave it null if we can't get the property
             }
 
             try {
-                val2 = PropertyUtils.getProperty(o2, property);
+                val2 = (T) PropertyUtils.getProperty(o2, property);
             } catch (NestedNullException ignored) {
+                // just leave it null if we can't get the property
             }
 
-            if (val1 == val2 || (val1 == null && val2 == null)) {
-                return -1;
+            if (val1 == val2) {
+                return 0;
             }
 
             if (val1 == null) {
@@ -101,22 +111,44 @@ public class NullSafeBeanComparator extends BeanComparator {
             }
 
             return this.comparator.compare(val1, val2);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             log.warn(e);
             return 0;
         }
     }
 
-    public NullSafeBeanComparator(String property, Comparator c) {
+    public NullSafeBeanComparator(String property, Comparator<T> c) {
         this.comparator = c;
         this.property = property;
     }
 
-    public NullSafeBeanComparator(String property, Comparator c, boolean nullAreHigh) {
+    public NullSafeBeanComparator(String property, Comparator<T> c, boolean nullAreHigh) {
         this.comparator = c;
         this.property = property;
         this.nullsAreHigh = nullAreHigh;
 
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(comparator, nullsAreHigh, property);
+        return result;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NullSafeBeanComparator other = (NullSafeBeanComparator) obj;
+        return Objects.equals(comparator, other.comparator) && nullsAreHigh == other.nullsAreHigh
+                && Objects.equals(property, other.property);
     }
 }
