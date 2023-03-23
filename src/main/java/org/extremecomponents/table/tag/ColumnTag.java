@@ -311,7 +311,7 @@ public class ColumnTag extends BodyTagSupport implements ColumnInterceptor {
             result = ExpressionEvaluatorManager.evaluate("result", result.toString(), Object.class, this, pageContext);
         }
 
-        if (result == null || (result != null && result instanceof String && StringUtils.isBlank(result.toString()))) {
+        if (result == null || (result instanceof String && StringUtils.isBlank(result.toString()))) {
             result = propertyValue;
         }
 

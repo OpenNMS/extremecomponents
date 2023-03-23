@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -42,14 +43,17 @@ public final class ExportResponseWrapper extends HttpServletResponseWrapper {
         return output.toByteArray();
     }
 
+    @Override
     public ServletOutputStream getOutputStream() {
         return new FilterServletOutputStream(output);
     }
 
+    @Override
     public PrintWriter getWriter() {
         return new PrintWriter(getOutputStream(), true);
     }
 
+    @Override
     public void setContentLength(int length) {
         this.contentLength = length;
         super.setContentLength(length);
@@ -59,11 +63,13 @@ public final class ExportResponseWrapper extends HttpServletResponseWrapper {
         return contentLength;
     }
 
+    @Override
     public void setContentType(String type) {
         this.contentType = type;
         super.setContentType(type);
     }
 
+    @Override
     public String getContentType() {
         return contentType;
     }
@@ -79,12 +85,24 @@ public final class ExportResponseWrapper extends HttpServletResponseWrapper {
             stream.write(b);
         }
 
+        @Override
         public void write(byte[] b) throws IOException {
             stream.write(b);
         }
 
+        @Override
         public void write(byte[] b, int off, int len) throws IOException {
             stream.write(b, off, len);
         }
+
+		@Override
+		public boolean isReady() {
+			return true;
+		}
+
+		@Override
+		public void setWriteListener(final WriteListener writeListener) {
+			throw new UnsupportedOperationException("write listening is not implemented");
+		}
     }
 }
