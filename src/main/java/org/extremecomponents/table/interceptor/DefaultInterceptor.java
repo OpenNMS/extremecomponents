@@ -26,20 +26,26 @@ import org.extremecomponents.table.core.TableModel;
  */
 public class DefaultInterceptor implements TableInterceptor, RowInterceptor, ColumnInterceptor, ExportInterceptor {
     public void addTableAttributes(TableModel tableModel, Table table) {
+        // do nothing by default, override this in a subclass
     }
 
     public void addRowAttributes(TableModel tableModel, Row row) {
+        // do nothing by default, override this in a subclass
     }
 
     public void modifyRowAttributes(TableModel model, Row row) {
+        // do nothing by default, override this in a subclass
     }
 
     public void addColumnAttributes(TableModel tableModel, Column column) {
+        // do nothing by default, override this in a subclass
     }
 
     public void modifyColumnAttributes(TableModel model, Column column) {
+        // do nothing by default, override this in a subclass
     }
 
     public void addExportAttributes(TableModel tableModel, Export export) {
+        // do nothing by default, override this in a subclass
     }
 }

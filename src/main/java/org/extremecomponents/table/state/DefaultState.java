@@ -15,6 +15,7 @@
  */
 package org.extremecomponents.table.state;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.extremecomponents.table.context.Context;
@@ -23,10 +24,11 @@ import org.extremecomponents.table.context.Context;
  * @author Jeff Johnston
  */
 public class DefaultState implements State {
-    public void saveParameters(Context context, String tableId, Map parameterMap) {
+    public void saveParameters(Context context, String tableId, Map<String,String[]> parameterMap) {
+        // by default, don't store parameters
     }
 
-    public Map getParameters(Context context, String tableId, String stateAttr) {
-        return null;
+    public Map<String,String[]> getParameters(Context context, String tableId, String stateAttr) {
+        return Collections.emptyMap();
     }
 }

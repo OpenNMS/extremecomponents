@@ -36,7 +36,7 @@ public final class TableRegistry extends AbstractRegistry {
     /**
      * Save the state of the parameters.
      */
-    protected void handleStateInternal(State state, Map tableParameterMap) {
+    protected void handleStateInternal(State state, Map<String, String[]> tableParameterMap) {
         state.saveParameters(context, tableId, tableParameterMap);
     }
 }
