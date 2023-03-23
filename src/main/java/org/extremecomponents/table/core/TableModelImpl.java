@@ -42,7 +42,7 @@ import org.extremecomponents.table.limit.TableLimit;
  * @author Jeff Johnston
  */
 public final class TableModelImpl implements TableModel {
-    private static Log logger = LogFactory.getLog(TableModel.class);
+    private static Log logger = LogFactory.getLog(TableModelImpl.class);
 
     // model interfaces
     private Context context;
@@ -72,15 +72,13 @@ public final class TableModelImpl implements TableModel {
     public TableModelImpl(Context context, String locale) {
         this.context = context;
 
-        Preferences preferences = new TableProperties();
+        preferences = new TableProperties();
         preferences.init(context, TableModelUtils.getPreferencesLocation(context));
-        this.preferences = preferences;
 
         this.locale = TableModelUtils.getLocale(context, preferences, locale);
 
-        Messages messages = TableModelUtils.getMessages(this);
+        messages = TableModelUtils.getMessages(this);
         messages.init(context, this.locale);
-        this.messages = messages;
     }
 
     public Context getContext() {
@@ -256,10 +254,10 @@ public final class TableModelImpl implements TableModel {
     }
 
     public void setColumnValues() throws Exception {
-        List columns = columnHandler.getColumns();
-        Iterator iter = columns.iterator();
+        List<Column> columns = columnHandler.getColumns();
+        Iterator<Column> iter = columns.iterator();
         while (iter.hasNext()) {
-            Column column = (Column) iter.next();
+            Column column = iter.next();
             if ("true".equals(column.getAttribute(TableConstants.IS_AUTO_GENERATE_COLUMN))) {
                 String property = column.getProperty();
                 Object propertyValue = TableModelUtils.getColumnPropertyValue(currentRowBean, property);

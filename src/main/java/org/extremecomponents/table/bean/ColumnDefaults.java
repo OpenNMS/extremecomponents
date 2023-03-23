@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.extremecomponents.table.core.RetrievalUtils;
 import org.extremecomponents.table.core.MessagesConstants;
 import org.extremecomponents.table.core.PreferencesConstants;
@@ -35,6 +37,11 @@ import org.extremecomponents.util.ExtremeUtils;
  * @author Jeff Johnston
  */
 final class ColumnDefaults {
+    private static Log logger = LogFactory.getLog(ColumnDefaults.class);
+
+    private ColumnDefaults() {
+    }
+
     static String getCell(TableModel model, String cell) {
         String result;
 
@@ -146,17 +153,13 @@ final class ColumnDefaults {
      * doing inline.
      */
     static boolean isNamedFormat(String format) {
-        char args[] = { '#', '/', '-' };
-        if (StringUtils.containsNone(format, args)) {
-            return true;
-        }
-
-        return false;
+        char[] args = { '#', '/', '-' };
+        return StringUtils.containsNone(format, args);
     }
 
     static Boolean isSortable(TableModel model, Boolean sortable) {
         if (sortable == null) {
-            return new Boolean(model.getTableHandler().getTable().isSortable());
+            return model.getTableHandler().getTable().isSortable();
         }
 
         return sortable;
@@ -164,7 +167,7 @@ final class ColumnDefaults {
 
     static Boolean isFilterable(TableModel model, Boolean filterable) {
         if (filterable == null) {
-            return new Boolean(model.getTableHandler().getTable().isFilterable());
+            model.getTableHandler().getTable().isFilterable();
         }
 
         return filterable;
@@ -202,7 +205,7 @@ final class ColumnDefaults {
     }
 
     public static String[] getCalcTitle(TableModel model, String[] calcTitle) {
-        List results = new ArrayList();
+        List<String> results = new ArrayList<>();
         
         if (calcTitle == null) {
             return new String[]{};
@@ -225,7 +228,7 @@ final class ColumnDefaults {
             }
         }
         
-        return (String[]) results.toArray(new String[results.size()]);
+        return results.toArray(new String[results.size()]);
     }
     
     static Boolean isEscapeAutoFormat(TableModel model, Boolean escapeAutoFormat) {
@@ -237,11 +240,15 @@ final class ColumnDefaults {
     }
     
     static Object getFilterOptions(TableModel model, Object filterOptions) {
+        if (model == null) return null;
+
         try {
             if (filterOptions != null) {
                 return RetrievalUtils.retrieveCollection(model.getContext(), filterOptions);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            logger.warn("unable to retrieve collection for context " + model.getContext(), e);
+        }
         
         return null;
     }

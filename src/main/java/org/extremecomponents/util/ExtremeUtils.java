@@ -21,16 +21,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -61,19 +60,20 @@ public final class ExtremeUtils {
 
         char[] ch = camelCaseText.toCharArray();
         String first = "" + ch[0];
-        String build = first.toUpperCase();
+
+        final StringBuilder build = new StringBuilder(first.toUpperCase());
 
         for (int i = 1; i < ch.length; i++) {
             String test = "" + ch[i];
 
             if (test.equals(test.toUpperCase())) {
-                build += " ";
+                build.append(" ");
             }
 
-            build += test;
+            build.append(test);
         }
 
-        return build;
+        return build.toString();
     }
 
     public static String formatDate(String parse, String format, Object value) {
@@ -175,10 +175,10 @@ public final class ExtremeUtils {
         try {
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
             java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(baos);
-            Enumeration enumeration = session.getAttributeNames();
+            Enumeration<String> enumeration = session.getAttributeNames();
 
             while (enumeration.hasMoreElements()) {
-                String name = (String) enumeration.nextElement();
+                String name = enumeration.nextElement();
                 Object obj = session.getAttribute(name);
                 oos.writeObject(obj);
 
@@ -196,21 +196,6 @@ public final class ExtremeUtils {
     }
 
     /**
-     * Get a list of bean or map property names
-     */
-    public static List beanProperties(Object bean) throws Exception {
-        List properties = new ArrayList();
-
-        if (bean instanceof Map) {
-            properties.addAll(((Map) bean).keySet());
-        } else {
-            properties.addAll(BeanUtils.describe(bean).keySet());
-        }
-
-        return properties;
-    }
-
-    /**
      * Check to see if it is safe to grab the property from the bean via
      * reflection.
      * 
@@ -220,7 +205,7 @@ public final class ExtremeUtils {
      */
     public static boolean isBeanPropertyReadable(Object bean, String property) {
         if (bean instanceof Map) {
-            return ((Map) bean).containsKey(property);
+            return ((Map<?,?>) bean).containsKey(property);
         }
 
         boolean isReadable;
@@ -243,12 +228,12 @@ public final class ExtremeUtils {
      * @param startsWithValue
      *            A way to identify all the checkboxes. For example ckbox_.
      */
-    public static List checkboxesSelected(HttpServletRequest request, String startsWithValue) {
-        List results = new ArrayList();
+    public static List<String> checkboxesSelected(HttpServletRequest request, String startsWithValue) {
+        List<String> results = new ArrayList<>();
 
-        Enumeration parameterNames = request.getParameterNames();
+        Enumeration<String> parameterNames = request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
-            String parameterName = (String) parameterNames.nextElement();
+            String parameterName = parameterNames.nextElement();
             if (parameterName.startsWith(startsWithValue)) {
                 results.add(StringUtils.substringAfter(parameterName, startsWithValue));
             }
@@ -261,14 +246,13 @@ public final class ExtremeUtils {
      * Take a map of parameter key/value pairs and create
      * a URI query string out of it.
      */
-    public static String getQueryString(Map parameterMap) {
-        StringBuffer results = new StringBuffer();
+    public static String getQueryString(Map<String,String[]> parameterMap) {
+        StringBuilder results = new StringBuilder();
 
-        Iterator iterator = parameterMap.keySet().iterator();
-        for (Iterator iter = iterator; iter.hasNext();) {
-            String key = (String) iter.next();
-            String value[] = (String[]) parameterMap.get(key);
-            
+        for (final Entry<String,String[]> entry : parameterMap.entrySet()) {
+            final String key = entry.getKey();
+            final String[] value = entry.getValue();
+
             if (results.length() == 0) {
                 results.append("?");
             } else {

@@ -35,7 +35,7 @@ public class ExportHandler {
     private static Log logger = LogFactory.getLog(ExportHandler.class);
     
     private TableModel model;
-    private List exports = new ArrayList();
+    private List<Export> exports = new ArrayList<>();
 
     public ExportHandler(TableModel model) {
         this.model = model;
@@ -54,8 +54,8 @@ public class ExportHandler {
     }
 
     public Export getExport(String view) {
-        for (Iterator iter = exports.iterator(); iter.hasNext();) {
-            Export export = (Export) iter.next();
+        for (Iterator<Export> iter = exports.iterator(); iter.hasNext();) {
+            Export export = iter.next();
 
             if (export.getView().equals(view)) {
                 return export;
@@ -80,7 +80,7 @@ public class ExportHandler {
         return export;
     }
 
-    public List getExports() {
+    public List<Export> getExports() {
         return exports;
     }
     
@@ -99,6 +99,6 @@ public class ExportHandler {
             return false;
         }
 
-        return getExports().size() > 0;
+        return !getExports().isEmpty();
     }
 }

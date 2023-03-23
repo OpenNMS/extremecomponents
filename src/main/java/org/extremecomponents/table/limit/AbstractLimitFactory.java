@@ -45,11 +45,7 @@ public abstract class AbstractLimitFactory implements LimitFactory {
             return false;
         }
 
-        if (exportTableId.equals(tableId)) {
-            return true;
-        }
-
-        return false;
+        return exportTableId.equals(tableId);
     }
 
     public int getCurrentRowsDisplayed(int totalRows, int rowsDisplayed) {
@@ -79,17 +75,17 @@ public abstract class AbstractLimitFactory implements LimitFactory {
     }
 
     public Sort getSort() {
-        Map sortedParameters = getSortedOrFilteredParameters(TableConstants.SORT);
+        Map<String, String> sortedParameters = getSortedOrFilteredParameters(TableConstants.SORT);
         if (sortedParameters == null) {
             return new Sort();
         }
 
-        for (Iterator iter = sortedParameters.keySet().iterator(); iter.hasNext();) {
-            String propertyOrAlias = (String) iter.next();
-            String value = (String) sortedParameters.get(propertyOrAlias);
+        for (Iterator<String> iter = sortedParameters.keySet().iterator(); iter.hasNext();) {
+            String propertyOrAlias = iter.next();
+            String value = sortedParameters.get(propertyOrAlias);
 
             if (value.equals(TableConstants.SORT_DEFAULT)) {
-                return new Sort();
+                continue;
             }
 
             String property = getProperty(propertyOrAlias);
@@ -100,7 +96,7 @@ public abstract class AbstractLimitFactory implements LimitFactory {
     }
 
     public FilterSet getFilterSet() {
-        Map filteredParameters = getSortedOrFilteredParameters(TableConstants.FILTER);
+        Map<String, String> filteredParameters = getSortedOrFilteredParameters(TableConstants.FILTER);
         FilterSet filterSet = getFilterSet(filteredParameters);
         if (filterSet.isCleared()) {
             removeFilterParameters();
@@ -115,26 +111,26 @@ public abstract class AbstractLimitFactory implements LimitFactory {
      * with a value in the Registry it will be removed.
      */
     void removeFilterParameters() {
-        Set set = registry.getParameterMap().keySet();
-        for (Iterator iter = set.iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
+        Set<String> set = registry.getParameterMap().keySet();
+        for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
+            String name = iter.next();
             if (name.startsWith(prefixWithTableId + TableConstants.FILTER)) {
                 iter.remove();
             }
         }
     }
 
-    FilterSet getFilterSet(Map filteredParameters) {
+    FilterSet getFilterSet(Map<String,String> filteredParameters) {
         if (filteredParameters == null) {
             return new FilterSet();
         }
 
-        String action = (String) filteredParameters.get(TableConstants.ACTION);
-        List filters = new ArrayList();
+        String action = filteredParameters.get(TableConstants.ACTION);
+        List<Filter> filters = new ArrayList<>();
 
-        for (Iterator iter = filteredParameters.keySet().iterator(); iter.hasNext();) {
-            String propertyOrAlias = (String) iter.next();
-            String value = (String) filteredParameters.get(propertyOrAlias);
+        for (Iterator<String> iter = filteredParameters.keySet().iterator(); iter.hasNext();) {
+            String propertyOrAlias = iter.next();
+            String value = filteredParameters.get(propertyOrAlias);
 
             if (StringUtils.isBlank(value) || propertyOrAlias.equals(TableConstants.ACTION)) {
                 continue;
@@ -144,17 +140,17 @@ public abstract class AbstractLimitFactory implements LimitFactory {
             filters.add(new Filter(propertyOrAlias, property, value));
         }
 
-        return new FilterSet(action, (Filter[]) filters.toArray(new Filter[filters.size()]));
+        return new FilterSet(action, filters.toArray(new Filter[filters.size()]));
     }
 
-    public Map getSortedOrFilteredParameters(String parameter) {
-        Map subset = new HashMap();
+    public Map<String, String> getSortedOrFilteredParameters(String parameter) {
+        Map<String, String> subset = new HashMap<>();
 
         String find = prefixWithTableId + parameter;
 
-        Set set = registry.getParameterMap().keySet();
-        for (Iterator iter = set.iterator(); iter.hasNext();) {
-            String key = (String) iter.next();
+        Set<String> set = registry.getParameterMap().keySet();
+        for (Iterator<String> iter = set.iterator(); iter.hasNext();) {
+            String key = iter.next();
             if (key.startsWith(find)) {
                 String value = registry.getParameter(key);
                 if (StringUtils.isNotBlank(value)) {
