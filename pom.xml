@@ -41,11 +41,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>ant</groupId>
-      <artifactId>ant</artifactId>
-      <version>1.7.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3.1</version>
