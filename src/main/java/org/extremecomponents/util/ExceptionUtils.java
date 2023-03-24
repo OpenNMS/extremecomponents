@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class ExceptionUtils {
     private static final Log logger = LogFactory.getLog(ExceptionUtils.class);
-    
+
     private ExceptionUtils() {}
 
     public static String formatStackTrace(Throwable t) {

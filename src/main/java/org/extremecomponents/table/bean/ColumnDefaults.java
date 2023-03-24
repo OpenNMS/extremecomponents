@@ -167,7 +167,7 @@ final class ColumnDefaults {
 
     static Boolean isFilterable(TableModel model, Boolean filterable) {
         if (filterable == null) {
-            model.getTableHandler().getTable().isFilterable();
+            return model.getTableHandler().getTable().isFilterable();
         }
 
         return filterable;

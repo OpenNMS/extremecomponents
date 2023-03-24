@@ -85,7 +85,7 @@ public abstract class AbstractLimitFactory implements LimitFactory {
             String value = sortedParameters.get(propertyOrAlias);
 
             if (value.equals(TableConstants.SORT_DEFAULT)) {
-                continue;
+                break;
             }
 
             String property = getProperty(propertyOrAlias);
